@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final _firebase = FirebaseAuth.instance;
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -13,16 +16,38 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreen extends State<AuthScreen> {
   final _form = GlobalKey<FormState>();
   var _isLogin = true;
-
   var _enterEmail = '';
   var _enterPassword = '';
 
-  void _submit() {
-    final valid = _form.currentState!.validate();
-    if (valid) {
-      _form.currentState!.save();
-      print(_enterEmail);
-      print(_enterPassword);
+  void _submit() async {
+    final isValid = _form.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+
+    _form.currentState!.save();
+
+    try {
+      //Login
+      if (_isLogin) {
+        //Login user
+        final UserCredentials = await _firebase.createUserWithEmailAndPassword(
+            email: _enterEmail, password: _enterPassword);
+        print(UserCredentials);
+      } else {
+        //Sign in
+        final userCrendentials = await _firebase.createUserWithEmailAndPassword(
+            email: _enterEmail, password: _enterPassword);
+        print(userCrendentials);
+      }
+    } on FirebaseException catch (error) {
+      if (error == 'email-already-in-use') {
+        //...
+      }
+
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error.message ?? 'Authentication')));
     }
   }
 
