@@ -91,10 +91,13 @@ class _AuthScreen extends State<AuthScreen> {
                             height: 12,
                           ),
                           ElevatedButton(
-                              onPressed: _submit,
-                              style: ElevatedButton.styleFrom(
-                                  primary: Color.fromRGBO(23, 123, 123, 0.6)),
-                              child: Text(_isLogin ? 'Login' : 'Signup')),
+                            onPressed: _submit,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Color.fromRGBO(160, 199, 199, 0.6),
+                            ),
+                            child: Text(_isLogin ? 'Login' : 'Signup'),
+                          ),
                           TextButton(
                             onPressed: () {
                               setState(() {
