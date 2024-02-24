@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,6 +44,16 @@ class _AuthScreen extends State<AuthScreen> {
         //Sign in
         final userCrendentials = await _firebase.createUserWithEmailAndPassword(
             email: _enterEmail, password: _enterPassword);
+
+        // Uploading the image
+        final storeRef = FirebaseStorage.instance
+            .ref()
+            .child('user_images')
+            .child('${userCrendentials.user!.uid}.png');
+        await storeRef.putFile(_selectedImage!);
+        final imageUrl = await storeRef.getDownloadURL();
+
+        print(imageUrl);
         print(userCrendentials);
       }
     } on FirebaseException catch (error) {
