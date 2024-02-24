@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,14 @@ class _AuthScreen extends State<AuthScreen> {
         await storeRef.putFile(_selectedImage!);
         final imageUrl = await storeRef.getDownloadURL();
 
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc('${userCrendentials.user!.uid}')
+            .set({
+          'username': 'to be done...',
+          'email': _enterEmail,
+          'imageUrl': imageUrl,
+        });
         print(imageUrl);
         print(userCrendentials);
       }
