@@ -16,14 +16,24 @@ void main() async {
   runApp(MyApp());
 }
 
+var kColorScheme =
+    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 96, 59, 181));
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'FlutterChat',
         theme: ThemeData(
-          primarySwatch: Colors.yellow,
-          primaryColor: Colors.red,
+          useMaterial3: true,
+          // primarySwatch: Colors.yellow,
+          // primaryColor: Colors.red,
+        ).copyWith(
+          colorScheme: kColorScheme,
+          appBarTheme: AppBarTheme().copyWith(
+            backgroundColor: kColorScheme.onPrimaryContainer,
+            foregroundColor: kColorScheme.primaryContainer,
+          ),
         ),
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
